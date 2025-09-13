@@ -1,0 +1,23 @@
+{
+  "name": "AILinkPreviewer",
+  "description": "Right-click PR links to get DeepSeek summaries.",
+  "version": "1.2",
+  "manifest_version": 3,
+  "permissions": ["contextMenus", "tabs", "storage", "scripting"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "GitHub PR Tools"
+  },
+  "host_permissions": [
+    "https://github.com/*",
+    "https://*/*" ],
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*/*/pull/*"],
+      "js": ["content.js"]
+    }
+  ]
+}

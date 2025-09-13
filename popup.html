@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AILinkPreviewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      width: 250px;
+      padding: 10px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 10px;
+    }
+    input, select, button {
+      width: 100%;
+      margin-top: 5px;
+      padding: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 15px;
+      background: #2ea44f;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #22863a;
+    }
+  </style>
+</head>
+<body>
+  <h3>AILinkPreviewer</h3>
+  
+  <label for="apiKey">DeepSeek API Key:</label>
+  <input type="password" id="apiKey" placeholder="Enter API key" />
+
+  <label for="summaryType">Summary Type:</label>
+  <select id="summaryType">
+    <option value="AILinkPreviewer">AILinkPreviewer</option>
+    <option value="LLM">LLM</option>
+    <option value="snippet">snippet</option>
+  </select>
+
+  <button id="saveBtn">Save Settings</button>
+
+  <p id="status"></p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

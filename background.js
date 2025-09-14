@@ -36,7 +36,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
       // Step 2: Show "fetching" modal
       chrome.tabs.sendMessage(tab.id, {
         action: "showSummaryModal",
-        summary: "⏳ Fetching PR summary from DeepSeek..."
+        summary: `⏳ Fetching PR summary: ${summaryType}...`
       });
 
       try {
@@ -65,14 +65,14 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 
         // Step 7: Build DeepSeek prompt
         let user_prompt = "";
-        if(summaryType === "snippet") {
+        if(summaryType === "MetaData Snippet") {
           user_prompt = linkMeta.linkTitle + " " + linkMeta.linkDescription;
           chrome.tabs.sendMessage(tab.id, { action: "showSummaryModal", summary: user_prompt });
           return;
-        } else if(summaryType === "LLM") {
+        } else if(summaryType === "Non-Contextual LLM") {
           user_prompt = linkMeta.linkBody;
           console.log("LLM prompt:", user_prompt);
-        } else if(summaryType === "AILinkPreviewer") {
+        } else if(summaryType === "Contextual LLM") {
           user_prompt = `Pull request title: ${context.prTitle}
                           Pull request description: ${context.prDescription}
 

@@ -2,7 +2,7 @@
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "summarizePR",
-    title: "Summarize PR with DeepSeek",
+    title: "AILinkPreviewer: Summarize Link",
     contexts: ["link"],
     documentUrlPatterns: ["https://github.com/*/*/pull/*"]
   });

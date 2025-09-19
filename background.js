@@ -8,6 +8,28 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
+// Re-inject content.js whenever popup settings are updated
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === "local" && (changes.deepseekApiKey || changes.summaryType)) {
+    console.log("⚡ Popup settings changed, reinjecting content.js...");
+
+    chrome.tabs.query({ url: "https://github.com/*/*/pull/*" }, (tabs) => {
+      for (const tab of tabs) {
+        chrome.scripting.executeScript({
+          target: { tabId: tab.id },
+          files: ["content.js"]
+        }, () => {
+          if (chrome.runtime.lastError) {
+            console.warn("Could not inject content.js:", chrome.runtime.lastError.message);
+          } else {
+            console.log("✅ content.js reinjected into", tab.url);
+          }
+        });
+      }
+    });
+  }
+});
+
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId !== "summarizePR") return;
@@ -26,12 +48,21 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     return;
   }
 
+  // ✅ Ensure content.js is injected (handles case where PR page was opened without refresh)
+  await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ["content.js"]
+  }).catch(err => console.warn("Could not inject content.js:", err));
+
   // Step 1: Get PR context from content script
   chrome.tabs.sendMessage(
     tab.id,
     { action: "scrapePRContext", linkUrl: info.linkUrl },
     async (context) => {
-      if (chrome.runtime.lastError) return console.error(chrome.runtime.lastError.message);
+      if (chrome.runtime.lastError) {
+        console.error("Message failed:", chrome.runtime.lastError.message);
+        return;
+      }
 
       // Step 2: Show "fetching" modal
       chrome.tabs.sendMessage(tab.id, {
@@ -65,20 +96,27 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 
         // Step 7: Build DeepSeek prompt
         let user_prompt = "";
-        if(summaryType === "MetaData Snippet") {
+        if (summaryType === "MetaData Snippet") {
           user_prompt = linkMeta.linkTitle + " " + linkMeta.linkDescription;
           chrome.tabs.sendMessage(tab.id, { action: "showSummaryModal", summary: user_prompt });
           return;
-        } else if(summaryType === "Non-Contextual LLM") {
+        } else if (summaryType === "Non-Contextual LLM") {
           user_prompt = linkMeta.linkBody;
           console.log("LLM prompt:", user_prompt);
-        } else if(summaryType === "Contextual LLM") {
+        } else if (summaryType === "Contextual LLM") {
           user_prompt = `Pull request title: ${context.prTitle}
-                          Pull request description: ${context.prDescription}
+Pull request description: ${context.prDescription}
 
-                          Repository title: ${context.repoName}
-                          Repository about: ${repoAbout}
-                          Link body being analyzed: ${linkMeta.linkBody}`;
+Repository title: ${context.repoName}
+Repository about: ${repoAbout}
+
+Link placement in PR: ${context.linkPosition}
+Surrounding comment/context: ${context.linkCommentBody}
+
+Extracted link metadata:
+- Title: ${linkMeta.linkTitle}
+- Description: ${linkMeta.linkDescription}
+- Body (truncated): ${linkMeta.linkBody}`;
         }
 
         // Step 8: Call DeepSeek API
@@ -95,28 +133,29 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
                 role: "system",
                 content: `You are a helpful assistant tasked with writing a concise summary of content referenced in a GitHub pull request. The reference is to an external webpage, and your goal is to summarize the most relevant part of the content based on the pull request context, helping developers understand it without opening the link.
 
-                            You will always be provided with:
+You will always be provided with:
+- Pull request title
+- Pull request description
+- Repository title
+- Repository description
+- Link placement within the PR (description, comment, or review comment)
+- Surrounding comment text if available
+- Link metadata (title, description, body)
 
-                                Pull request title
-                                Pull request description
-                                Repository title
-                                Repository description
-                                link body
+Your Task:
+Use the following reasoning steps before writing the final summary:
 
-                            Your Task:
-                            Use the following reasoning steps before writing the final summary:
+1. Identify the main purpose of the pull request using its title and description.
+2. Examine the webpage content to find sections most relevant to that purpose.
+3. Factor in the surrounding PR discussion (comment context, where the link was placed).
+4. Determine the core insight or fact from the webpage that supports or explains the PR’s purpose.
+5. Write a 1-sentence summary of that insight. Ensure the summary:
 
-                              1. Identify the main purpose of the pull request using its title and description.
-                              2. Examine the webpage content to find sections most relevant to that purpose.
-                              3. Compare against patch details or changed files to understand the implementation focus.
-                              4. Determine the core insight or fact from the webpage that supports or explains the PR’s purpose.
-                              5. Write a 1-sentence summary of that insight. Ensure the summary:
+- Is standalone and factual
+- Is phrased as if it’s part of the pull request itself
+- Avoids references to external links or hosting
 
-                                    Is standalone and factual
-                                    Is phrased as if it’s part of the pull request itself
-                                    Avoids references to external links or hosting
-
-                            Important: Output only the final 1-sentence summary, with no explanation, no headings, and no formatting.`
+Important: Output only the final 1-sentence summary, with no explanation, no headings, and no formatting.`
               },
               { role: "user", content: user_prompt }
             ],
@@ -137,5 +176,3 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     }
   );
 });
-
-

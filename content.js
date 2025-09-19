@@ -1,60 +1,98 @@
 console.log("✅ Content script loaded on:", window.location.href);
 
-// Listen for messages from background.js
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  // Show modal
-  if (msg.action === "showSummaryModal") {
-    showSummaryModal(msg.summary);
-    sendResponse({ status: "modal shown" });
-  }
+// Prevent duplicate listeners if reinjected
+if (!window.__deepseekListenerAdded) {
+  chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    // Show modal
+    if (msg.action === "showSummaryModal") {
+      showSummaryModal(msg.summary);
+      sendResponse({ status: "modal shown" });
+    }
 
-  // Scrape PR context from the page
-  if (msg.action === "scrapePRContext") {
-    const context = {};
+    // Scrape PR context from the page
+    if (msg.action === "scrapePRContext") {
+      const context = {};
 
-    // Repo name
-    const repoEl = document.querySelector('strong[itemprop="name"] a');
-    context.repoName = repoEl ? repoEl.innerText.trim() : "";
+      // Repo name
+      const repoEl = document.querySelector('strong[itemprop="name"] a');
+      context.repoName = repoEl ? repoEl.innerText.trim() : "";
 
-    // PR title
-    const titleEl = document.querySelector('span.js-issue-title') ||
-                    document.querySelector('h1.gh-header-title .js-issue-title');
-    context.prTitle = titleEl ? titleEl.innerText.trim() : "";
+      // PR title
+      const titleEl = document.querySelector('span.js-issue-title') ||
+                      document.querySelector('h1.gh-header-title .js-issue-title');
+      context.prTitle = titleEl ? titleEl.innerText.trim() : "";
 
-    // PR description (first comment body)
-    const descEl = document.querySelector('.js-comment-body');
-    context.prDescription = descEl ? descEl.innerText.trim() : "";
+      // PR description (first comment body)
+      const descEl = document.querySelector('.js-comment-body');
+      context.prDescription = descEl ? descEl.innerText.trim() : "";
 
-    sendResponse(context);
-    return true;
-  }
+      // Find the link that was right-clicked
+      const linkElements = Array.from(document.querySelectorAll('a'));
+      const targetLink = linkElements.find(a => a.href === msg.linkUrl);
 
-  // Parse repository HTML for repoAbout
-  if (msg.action === "parseRepoHTML") {
-    const doc = new DOMParser().parseFromString(msg.html, "text/html");
-    const aboutEl = doc.querySelector('p.f4.my-3') || doc.querySelector('meta[name="description"]');
-    const repoAbout = aboutEl ? (aboutEl.tagName.toLowerCase() === 'meta' ? aboutEl.content : aboutEl.innerText.trim()) : "";
-    sendResponse({ repoAbout });
-    return true;
-  }
+      if (targetLink) {
+        let position = "Unknown";
+        let commentBody = "";
 
-  // Parse link HTML for metadata
-  if (msg.action === "parseLinkHTML") {
-    const doc = new DOMParser().parseFromString(msg.html, "text/html");
+        const reviewContainer = targetLink.closest('.review-comment');  // review comment
+        const commentContainer = targetLink.closest('.js-comment');     // general comment
 
-    const titleEl = doc.querySelector("title");
-    const metaDesc = doc.querySelector('meta[name="description"]') || doc.querySelector('meta[property="og:description"]');
-    const bodyEl = doc.querySelector("body");
+        if (descEl && descEl.contains(targetLink)) {
+          position = "Description";
+          commentBody = descEl.innerText.trim();
+        } else if (reviewContainer) {
+          position = "Review comment";
+          const bodyEl = reviewContainer.querySelector('.js-comment-body');
+          commentBody = bodyEl ? bodyEl.innerText.trim() : "";
+        } else if (commentContainer) {
+          position = "Comment";
+          const bodyEl = commentContainer.querySelector('.js-comment-body');
+          commentBody = bodyEl ? bodyEl.innerText.trim() : "";
+        }
 
-    const linkMeta = {
-      linkTitle: titleEl ? titleEl.innerText.trim() : "",
-      linkDescription: metaDesc ? metaDesc.content.trim() : "",
-      linkBody: bodyEl ? bodyEl.innerText.trim() : ""
-    };
-    sendResponse(linkMeta);
-    return true;
-  }
-});
+        context.linkPosition = position;
+        context.linkCommentBody = commentBody;
+      } else {
+        context.linkPosition = "Unknown";
+        context.linkCommentBody = "";
+      }
+
+      console.log("📦 Scraped PR context:", context);
+      sendResponse(context);
+      return true;
+    }
+
+    // Parse repository HTML for repoAbout
+    if (msg.action === "parseRepoHTML") {
+      const doc = new DOMParser().parseFromString(msg.html, "text/html");
+      const aboutEl = doc.querySelector('p.f4.my-3') || doc.querySelector('meta[name="description"]');
+      const repoAbout = aboutEl
+        ? (aboutEl.tagName.toLowerCase() === "meta" ? aboutEl.content : aboutEl.innerText.trim())
+        : "";
+      sendResponse({ repoAbout });
+      return true;
+    }
+
+    // Parse link HTML for metadata
+    if (msg.action === "parseLinkHTML") {
+      const doc = new DOMParser().parseFromString(msg.html, "text/html");
+
+      const titleEl = doc.querySelector("title");
+      const metaDesc = doc.querySelector('meta[name="description"]') || doc.querySelector('meta[property="og:description"]');
+      const bodyEl = doc.querySelector("body");
+
+      const linkMeta = {
+        linkTitle: titleEl ? titleEl.innerText.trim() : "",
+        linkDescription: metaDesc ? metaDesc.content.trim() : "",
+        linkBody: bodyEl ? bodyEl.innerText.trim().substring(0, 1000) : ""
+      };
+      sendResponse(linkMeta);
+      return true;
+    }
+  });
+
+  window.__deepseekListenerAdded = true;
+}
 
 // Function to inject a modal
 function showSummaryModal(summary) {
@@ -86,8 +124,10 @@ function showSummaryModal(summary) {
   modal.style.overflowY = "auto";
   modal.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
   modal.innerHTML = `
-    <h2 style="margin-top:0; color:#000000;">DeepSeek Summary</h2>
-    <pre style="white-space:pre-wrap; color:#000000;">${summary}</pre>
+    <h2 style="margin-top:0; color:#333;">DeepSeek Summary</h2>
+    <div style="color:#111; font-size:14px; line-height:1.5; white-space:pre-wrap;">
+      ${summary}
+    </div>
     <button id="closeModal" style="
       margin-top:15px;
       padding:8px 12px;

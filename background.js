@@ -96,7 +96,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
 
         // Step 7: Build DeepSeek prompt
         let user_prompt = "";
-        if (summaryType === "MetaData Snippet") {
+        if (summaryType === "metadata-based snippets") {
           user_prompt = linkMeta.linkTitle + " " + linkMeta.linkDescription;
           chrome.tabs.sendMessage(tab.id, { action: "showSummaryModal", summary: user_prompt });
           return;

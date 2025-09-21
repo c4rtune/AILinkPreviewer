@@ -84,7 +84,7 @@ if (!window.__deepseekListenerAdded) {
       const linkMeta = {
         linkTitle: titleEl ? titleEl.innerText.trim() : "",
         linkDescription: metaDesc ? metaDesc.content.trim() : "",
-        linkBody: bodyEl ? bodyEl.innerText.trim().substring(0, 1000) : ""
+        linkBody: bodyEl ? bodyEl.innerText.trim() : ""
       };
       sendResponse(linkMeta);
       return true;

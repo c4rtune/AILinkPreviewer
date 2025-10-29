@@ -37,3 +37,4 @@ Non-Contextual LLM
 metadata-based snippets
 <img width="1933" height="863" alt="Screenshot 2025-10-29 132722" src="https://github.com/user-attachments/assets/fa0eeac3-8b11-4181-9148-19422da8b535" />
 
+From the three provided screenshots, we can observe that the Contextual LLM generates the most detailed and technically comprehensive summary. This level of depth and precision is particularly beneficial for code reviewers, as it helps them understand the underlying logic, and save time wasted on reading.

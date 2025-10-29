@@ -28,11 +28,12 @@ Once a summary type have been selected, code reviewer can right click the link t
 
 Using  https://doc.qt.io/archives/qt-5.15/qmetaobject.html#connectSlotsByName as an example, here are the summaries for all 3 type.
 
-<img width="1812" height="992" alt="Screenshot 2025-10-29 132639" src="https://github.com/user-attachments/assets/533c372d-6ddd-487a-82c5-5ed9567cd535" />
 Contextual LLM
+<img width="1812" height="992" alt="Screenshot 2025-10-29 132639" src="https://github.com/user-attachments/assets/533c372d-6ddd-487a-82c5-5ed9567cd535" />
 
-<img width="1859" height="894" alt="Screenshot 2025-10-29 132657" src="https://github.com/user-attachments/assets/9b469e01-b8f5-4f5c-8de9-0dd2045f09ae" />
 Non-Contextual LLM
+<img width="1859" height="894" alt="Screenshot 2025-10-29 132657" src="https://github.com/user-attachments/assets/9b469e01-b8f5-4f5c-8de9-0dd2045f09ae" />
 
-<img width="1933" height="863" alt="Screenshot 2025-10-29 132722" src="https://github.com/user-attachments/assets/fa0eeac3-8b11-4181-9148-19422da8b535" />
 metadata-based snippets
+<img width="1933" height="863" alt="Screenshot 2025-10-29 132722" src="https://github.com/user-attachments/assets/fa0eeac3-8b11-4181-9148-19422da8b535" />
+

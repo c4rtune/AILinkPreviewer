@@ -12,7 +12,7 @@ Once complete you should be able to see a new extension when clicking on extensi
 
 Link to the tools demonstration: https://www.youtube.com/watch?v=h2qH4RtrB3E
 ___________________________________________________
-<h2>*** USE CASE example ***</h2>
+<h2>USE CASE example</h2>
 
 <img width="2560" height="1440" alt="Screenshot 2025-10-29 132357" src="https://github.com/user-attachments/assets/ffba14cb-19b4-41cc-bd31-98143d9e3aa6" />
 
@@ -39,7 +39,7 @@ metadata-based snippets
 
 From the three provided screenshots, we can observe that the Contextual LLM generates the most detailed and technically comprehensive summary. This level of depth and precision is particularly beneficial for code reviewers, as it helps them understand the underlying logic, and save time wasted on reading.
 ___________________________________________________
-<h2>***Privacy Notice***</h2>
+<h2>Privacy Notice</h2>
 
 AILinkPreviewer collects and transmits limited contextual information for the purpose of generating link previews through a connected Large Language Model (LLM) API.
 
@@ -54,3 +54,4 @@ No redaction, anonymization, or content filtering is applied prior to transmissi
 <h3>Deployment and Hosting</h3>
 
 AILinkPreviewer can be installed and executed locally or within an on-premise environment. However, the application relies on remote LLM API calls for content analysis and preview generation. Users requiring complete data isolation should configure an LLM endpoint that aligns with their organization’s privacy, compliance, and security policies.
+

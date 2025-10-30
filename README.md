@@ -14,9 +14,9 @@ Link to the tools demonstration: https://www.youtube.com/watch?v=h2qH4RtrB3E
 ___________________________________________________
 <h2>USE CASE example</h2>
 
-<img width="2560" height="1440" alt="Screenshot 2025-10-29 132357" src="https://github.com/user-attachments/assets/ffba14cb-19b4-41cc-bd31-98143d9e3aa6" />
+<img width="2560" height="1440" alt="Screenshot 2025-10-30 105424" src="https://github.com/user-attachments/assets/708ce66a-38f3-49b3-92e6-75a3113b5f30" />
 
-We have provide an example use case for our AILinkPreviewer. In this use case we can see that the pull request point the user to https://doc.qt.io/archives/qt-5.15/qmetaobject.html#connectSlotsByName for more information. The link redirect user to a documentation page qt-5.15 which can be time consuming to read all of it content. By using AILinkPreviewer, we can summarize the content of this website to a short and concise paragraph. 
+We have provide an example use case for our AILinkPreviewer. In this use case we can see that the pull request reference https://https://en.wikipedia.org/wiki/Just-noticeable_difference. The link redirect user to a wikipedia page which can be time consuming to read all of it content. By using AILinkPreviewer, we can summarize the content of this website to a short and concise paragraph. 
 
 AILinkPreviewer offer 3 different type of summarization being Contextual LLM, Non-Contextual LLM, and metadata-based snippets which can be select from the extension widget on the top right of the browser
 
@@ -24,20 +24,21 @@ AILinkPreviewer offer 3 different type of summarization being Contextual LLM, No
 
 Once a summary type have been selected, code reviewer can right click the link they wishs to summrize and press the AILinkPreviewer: Summarization link option.
 
-<img width="2560" height="1440" alt="Screenshot 2025-10-29 132625" src="https://github.com/user-attachments/assets/a4de9b95-6fbc-4e44-9ad0-7631abb7c431" />
+<img width="1602" height="650" alt="Screenshot 2025-10-30 105445" src="https://github.com/user-attachments/assets/27363763-5ac6-4891-bb20-dd6b34f65cf8" />
 
 Using  https://doc.qt.io/archives/qt-5.15/qmetaobject.html#connectSlotsByName as an example, here are the summaries for all 3 type.
 
 Contextual LLM
-<img width="1812" height="992" alt="Screenshot 2025-10-29 132639" src="https://github.com/user-attachments/assets/533c372d-6ddd-487a-82c5-5ed9567cd535" />
+<img width="1167" height="611" alt="Screenshot 2025-10-30 105512" src="https://github.com/user-attachments/assets/5341046b-68c8-42a5-a163-ab382e6368a2" />
 
 Non-Contextual LLM
-<img width="1859" height="894" alt="Screenshot 2025-10-29 132657" src="https://github.com/user-attachments/assets/9b469e01-b8f5-4f5c-8de9-0dd2045f09ae" />
+<img width="1213" height="515" alt="Screenshot 2025-10-30 105531" src="https://github.com/user-attachments/assets/ffee7e4e-99af-4517-9221-c3f98fff0466" />
 
 metadata-based snippets
-<img width="1933" height="863" alt="Screenshot 2025-10-29 132722" src="https://github.com/user-attachments/assets/fa0eeac3-8b11-4181-9148-19422da8b535" />
+<img width="1380" height="542" alt="Screenshot 2025-10-30 105555" src="https://github.com/user-attachments/assets/0a6504d8-2533-4ebd-a47b-5466f67f6ab2" />
 
-From the three provided screenshots, we can observe that the Contextual LLM generates the most detailed and technically comprehensive summary. This level of depth and precision is particularly beneficial for code reviewers, as it helps them understand the underlying logic, and save time wasted on reading.
+
+From the three provided screenshots, we can see that the Contextual LLM generates a summary that not only condenses the content but also provides meaningful context about the information. This level of depth and precision is especially beneficial for code reviewers, as it helps them understand the underlying logic and saves time otherwise spent on extensive reading.
 ___________________________________________________
 <h2>Privacy Notice</h2>
 
@@ -54,4 +55,5 @@ No redaction, anonymization, or content filtering is applied prior to transmissi
 <h3>Deployment and Hosting</h3>
 
 AILinkPreviewer can be installed and executed locally or within an on-premise environment. However, the application relies on remote LLM API calls for content analysis and preview generation. Users requiring complete data isolation should configure an LLM endpoint that aligns with their organization’s privacy, compliance, and security policies.
+
 

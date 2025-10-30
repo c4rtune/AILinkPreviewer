@@ -11,8 +11,8 @@ Once complete you should be able to see a new extension when clicking on extensi
 
 
 Link to the tools demonstration: https://www.youtube.com/watch?v=h2qH4RtrB3E
-
-USE CASE example
+___________________________________________________
+<h2>*** USE CASE example ***</h2>
 
 <img width="2560" height="1440" alt="Screenshot 2025-10-29 132357" src="https://github.com/user-attachments/assets/ffba14cb-19b4-41cc-bd31-98143d9e3aa6" />
 
@@ -38,3 +38,19 @@ metadata-based snippets
 <img width="1933" height="863" alt="Screenshot 2025-10-29 132722" src="https://github.com/user-attachments/assets/fa0eeac3-8b11-4181-9148-19422da8b535" />
 
 From the three provided screenshots, we can observe that the Contextual LLM generates the most detailed and technically comprehensive summary. This level of depth and precision is particularly beneficial for code reviewers, as it helps them understand the underlying logic, and save time wasted on reading.
+___________________________________________________
+<h2>***Privacy Notice***</h2>
+
+AILinkPreviewer collects and transmits limited contextual information for the purpose of generating link previews through a connected Large Language Model (LLM) API.
+
+<h3>Data Sent</h3>
+
+The data transmitted to the LLM API varies based on where the link appears. When a link is included in a pull request, the transmitted data includes the pull request title and description, the repository name and description, and metadata from the linked page such as its title, description, and body. When a link appears in a comment, the same information is sent, along with the full text of the comment body.
+
+<h3>Data Handling</h3>
+
+No redaction, anonymization, or content filtering is applied prior to transmission. The extracted information, together with the API key provided by the user, is sent to the configured LLM endpoint for processing.
+
+<h3>Deployment and Hosting</h3>
+
+AILinkPreviewer can be installed and executed locally or within an on-premise environment. However, the application relies on remote LLM API calls for content analysis and preview generation. Users requiring complete data isolation should configure an LLM endpoint that aligns with their organization’s privacy, compliance, and security policies.

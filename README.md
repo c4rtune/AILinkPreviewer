@@ -26,7 +26,7 @@ Once a summary type have been selected, code reviewer can right click the link t
 
 <img width="1602" height="650" alt="Screenshot 2025-10-30 105445" src="https://github.com/user-attachments/assets/27363763-5ac6-4891-bb20-dd6b34f65cf8" />
 
-Using  https://doc.qt.io/archives/qt-5.15/qmetaobject.html#connectSlotsByName as an example, here are the summaries for all 3 type.
+Using https://https://en.wikipedia.org/wiki/Just-noticeable_difference as an example, here are the summaries for all 3 type.
 
 Contextual LLM
 <img width="1167" height="611" alt="Screenshot 2025-10-30 105512" src="https://github.com/user-attachments/assets/5341046b-68c8-42a5-a163-ab382e6368a2" />
@@ -55,5 +55,6 @@ No redaction, anonymization, or content filtering is applied prior to transmissi
 <h3>Deployment and Hosting</h3>
 
 AILinkPreviewer can be installed and executed locally or within an on-premise environment. However, the application relies on remote LLM API calls for content analysis and preview generation. Users requiring complete data isolation should configure an LLM endpoint that aligns with their organization’s privacy, compliance, and security policies.
+
 
 
